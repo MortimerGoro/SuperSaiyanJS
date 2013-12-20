@@ -63,16 +63,6 @@
 	</head>
 
 	<body>
-		<img src="logo-cortado.png" class="logoCortado" style="top:100px;left:100px;position:absolute;width:120px;height:96px;">
-		<img src="logo-cortado.png" class="logoCortado" style="top:700px;left:650px;position:absolute;width:120px;height:96px;">
-		<img src="logo-cortado.png" class="logoCortado" style="top:500px;left:230px;position:absolute;width:120px;height:96px;">
-
-		<img src="logo-cortado.png" class="logoCortado" style="top:600px;left:1130px;position:absolute;width:120px;height:96px;">
-		<img src="logo-cortado.png" class="logoCortado" style="top:100px;left:930px;position:absolute;width:120px;height:96px;">
-		<img src="logo-cortado.png" class="logoCortado" style="top:100px;left:1430px;position:absolute;width:120px;height:96px;">
-
-		<img src="logo-cortado.png" class="logoCortado" style="top:500px;left:1530px;position:absolute;width:120px;height:96px;">
-
 		<div class="reveal">
 
 			<!-- Any section element inside of this container is displayed as a slide -->
@@ -908,30 +898,6 @@ v8::HandleScope handle_scope(getSharedIsolate());
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
 			});
-			
-			var element = $('.logoCortado');
-
-			element.bind('cusfadeOut',function() {
-			        $(this).fadeOut(((Math.random() * 4000 | 0) + 2000),function() {
-			                $(this).trigger('cusfadeIn');
-			        });
-			});
-			element.bind('cusfadeIn',function() {
-			        $(this).fadeIn(((Math.random() * 4000 | 0) + 2000), function() {
-			                $(this).trigger('cusfadeOut');
-			        });
-			});
-			element.trigger('cusfadeOut');
-
-			Reveal.addEventListener( 'slidechanged', function( event ) {
-				if(event.indexh == 1){
-					$('.logoCortado').remove();
-				}
-			});
-            
-            if( Reveal.getIndices().h != 0){
-				$('.logoCortado').remove();
-            }
         
             $(document).ready( function() {
 
