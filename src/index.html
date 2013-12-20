@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Super Saiyan JavaScript</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<script src="jquery.js"></script>
+
+		<style type="text/css">
+		.gameList{
+			margin: 0;
+			padding: 0;
+		}
+		.gameList li{
+			margin-left: -25px;
+			list-style-type: none;
+			float: left;
+			text-align: center;
+		}
+        iframe {
+            background: transparent !important;   
+        }
+        .white {
+            color:white !important;
+        }
+		.reveal .controls div.navigate-left,
+		.reveal .controls div.navigate-left.enabled {
+		  border-right-color: white; }
+
+		.reveal .controls div.navigate-right,
+		.reveal .controls div.navigate-right.enabled {
+		  border-left-color: white; }
+
+		.reveal .controls div.navigate-up,
+		.reveal .controls div.navigate-up.enabled {
+		  border-bottom-color: white; }
+
+		.reveal .controls div.navigate-down,
+		.reveal .controls div.navigate-down.enabled {
+		  border-top-color: white; }
+
+		 @font-face {
+  			font-family: 'SaiyanSans';
+  			src: url('Saiyan-Sans.ttf');
+		}
+		</style>
+	</head>
+
+	<body>
+		<img src="logo-cortado.png" class="logoCortado" style="top:100px;left:100px;position:absolute;width:120px;height:96px;">
+		<img src="logo-cortado.png" class="logoCortado" style="top:700px;left:650px;position:absolute;width:120px;height:96px;">
+		<img src="logo-cortado.png" class="logoCortado" style="top:500px;left:230px;position:absolute;width:120px;height:96px;">
+
+		<img src="logo-cortado.png" class="logoCortado" style="top:600px;left:1130px;position:absolute;width:120px;height:96px;">
+		<img src="logo-cortado.png" class="logoCortado" style="top:100px;left:930px;position:absolute;width:120px;height:96px;">
+		<img src="logo-cortado.png" class="logoCortado" style="top:100px;left:1430px;position:absolute;width:120px;height:96px;">
+
+		<img src="logo-cortado.png" class="logoCortado" style="top:500px;left:1530px;position:absolute;width:120px;height:96px;">
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-background="backgrounds/vegeta.jpg">
+                <!--<h1 style="font-size:100px; font-family: SaiyanSans; color: #f5f287; text-shadow: 4px 4px 20px #000000">Super Saiyan JavaScript</h1>-->
+                <img style="border:0; box-shadow:none; background:transparent;" src="img/title.png" />
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h2>About me</h2>
+					<img src="backgrounds/scouter.jpg" width="200" />
+					<h3>Imanol Fernández</h3>
+					<ul>
+						<li>Lead Developer at Ludei</li>
+						<li>C/C++, JS, iOS, Android &amp; Graphics guy</li>
+						<li>Games, high Level &amp; low Level stuff</li>
+                        <li>Obsessed with raw performance</li>
+                        <li>Dragon Ball &amp; Metal Gear Solid ultra fan</li>
+						<li>@MortimerGoro</li>
+					</ul>
+				</section>
+
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Today, we're going to talk about</h3>
+					<ul>
+						<li>JavaScript perfomance</li>
+						<ul>
+							<li>Understand how a modern JS Engine works</li>
+							<li>Profile and Write optimized code mindfully</li>
+							<li>C++ vs JS performance example</li>
+						</ul>
+						<li>Rendering Performance</li>
+						<ul>
+							<li>Canvas 2D tips</li>
+							<li>WebGL tips</li>
+							<li>Common pitfalls</li>
+						</ul>
+                        <li>CocoonJS</li>
+                        <ul>
+							<li>How does it work?</li>
+							<li>Challenges</li>
+						</ul>
+
+					</ul>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>The JavaScript nature</h3>
+					<p><img src="img/noidea.jpg" width="500" /></p>
+					<ul>
+						<li>Extremely sensitive language</li>
+						<li>Limited compile-time type information</li>
+					</ul>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>A modern JS engine uses two compilers</h3>
+					
+					<p>
+						<img src="img/yamcha.png" width="200" style="border:0" />
+						<img src="img/goku.png" width="200" style="border:0" />
+					</p>
+					<ul>
+						<li>ASAP compiler (aka Yamcha)</li>
+						<ul>
+							<li>Quickly generate unoptimized JIT code</li>
+							<li>No type inference at compile time</li>
+						</ul>
+						<li>Optimized compiler (aka Goku)</li>
+						<ul>
+							<li>High performance JIT Code</li>
+							<li>Based on runtime heuristics and inferences</li>
+						</ul>
+					</ul>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>How does a JS Engine evaluate a variable?</h3>
+					<pre><code class="javascript" data-trim>
+function Test(a, b) {
+    this.a = a;
+    this.b = b;
+}
+Test.prototype = {
+    hello: function() {
+        console.log(mortimer);		
+    }
+}
+var test = new Test(1,2);
+test.hello();
+					</code></pre>
+    				<p class="fragment fade-in">Function scope</p>
+    				<p class="fragment fade-in">Prototype scope</p>
+    				<p class="fragment fade-in">Global scope</p>
+    				<p class="fragment fade-in" style="color:red">ReferenceError: mortimer is not defined</p>
+				</section>
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>How does a Browser evaluate a variable?</h3>
+					<pre><code class="javascript" data-trim>
+function Test(a, b) {
+    this.a = a;
+    this.b = b;
+}
+Test.prototype = {
+    hello: function() {
+        console.log(mortimer);		
+    }
+}
+var test = new Test(1,2);
+test.hello();
+					</code></pre>
+    				<p>Function scope</p>
+    				<p>Prototype scope</p>
+    				<p>Global scope</p>
+    				<p class="fragment fade-in" style="color:red">document.getElementById!</p>
+    				<pre class="fragment fade-in"><code data-trim>
+var div = document.createElement("div");
+div.id = "mortimer";
+document.body.appendChild(div);
+test.hello(); //or window.mortimer
+					</code></pre>
+    				<p class="fragment fade-in">&lt;div id=&quot;mortimer&quot;&gt;&lt;/div&gt;</p>
+				</section>	
+
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<p><img src="img/jquery.jpg" width="250" /></p>
+    				<p><pre><code data-trim>
+&lt;head&gt;&lt;script src=&quot;jquery.js&quot;&gt;&lt;/script&gt;&lt;/head&gt;
+&lt;body&gt;
+	&lt;canvas id=&quot;mycanvas&quot;&gt;&lt;/canvas&gt;
+	&lt;script type=&quot;text/javascript&quot;&gt;
+		var canvas = $('#mycanvas');
+	&lt;/script&gt;
+&lt;/body&gt;
+					</code></pre></p>
+					<p><pre><code data-trim>
+&lt;body&gt;
+	&lt;canvas id=&quot;mycanvas&quot;&gt;&lt;/canvas&gt;
+	&lt;script type=&quot;text/javascript&quot;&gt;
+		var canvas = mycanvas;
+	&lt;/script&gt;
+&lt;/body&gt;
+					</code></pre></p>
+				</section>
+
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Mutenroshi's Tips</h3>
+					<p><img src="img/mutenroshi.jpg" style="border:0" width="250" /></p>
+					<ul>
+						<li>Avoid long prototype chains</li>
+						<li>Avoid global scope variables or flags</li>
+					</ul>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Hidden classes</h3>
+					<p>Optimized compiler creates hidden classes for objects at runtime</p>
+					<pre><code data-trim>
+function Sprite(x, y, data) {
+	this.x = x;
+	this.y = y;
+	this.data = data;
+}
+var sprite1 = new Sprite(100,200,0);
+var sprite2 = new Sprite(300,300,0);
+					</code></pre>
+					<ul>
+						<li class="fragment fade-in">JIT creates a 'Sprite' class in the first constructor call</li>
+						<li class="fragment fade-in">Next constructor calls reutilize the same class</li>
+						<li class="fragment fade-in">Functions that use the same hidden classes are optimized</li>
+					</ul>
+					<pre class="fragment fade-in"><code data-trim>
+sprite1.tag = 11; /*Warning! Another hidden class*/
+					</code></pre>
+					<pre class="fragment fade-in"><code data-trim>
+var sprite3 = new Sprite(50,50, "id43"); /*Warning! Another hidden class*/
+					</code></pre>
+				</section>	
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Mutenroshi's Tips</h3>
+					<p><img src="img/mutenroshi.jpg" style="border:0" width="250" /></p>
+					<ul>
+						<li>Initialize all object members in the constructor function</li>
+						<li>Always use the same types for the members</li>
+						<li>Don't use more than ~30 members: Hidden class => Hashmap</li>
+					</ul>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Values</h3>
+					<p>How do JS Engines represent values efficiently?</p>
+					<pre class="fragment fade-in"><code data-trim>
+union {
+    int64_t asInt64;
+    double asDouble;
+    struct {
+        union {
+            int32_t   asInt32;
+            JSString* str;
+            JSObject* obj;
+        } payload;
+        int32_t tag;
+    } asBits;
+}
+					</code></pre>
+				<p class="fragment fade-in">31 bit integers can be "Immediates" (wrapped in the JSValue * pointer)</p>
+				</section>	
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Mutenroshi's Tips</h3>
+					<p><img src="img/mutenroshi.jpg" style="border:0" width="250" /></p>
+					<p>Prefer 31 bit integers: less memory &amp; improved perfomance</p>
+				</section>
+
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Arrays</h3>
+					<p>How do JS Engines handle arrays efficiently?</p>
+					<p class="fragment fade-in">&lt;64K Arrays use contiguous storage (FAST)<br />&gt;64K Arrays use hash table storage (SLOW)</p>
+					<p class="fragment fade-in">Numerical Arrays use optimized buffers</p>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+var array = new Array(16);
+a[0] = 11; //Allocation
+a[1] = 33;
+a[2] = 17;
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+a[3] = 3.1416; //Warning! Allocation and buffer change!
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+a[4] = true; //Warning! Allocation and buffer change!
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+[11, 33, 17, 3.1416, true]; //Single allocation
+					</code></pre>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Mutenroshi's Tips</h3>
+					<p><img src="img/mutenroshi.jpg" style="border:0" width="250" /></p>
+					<ul>
+						<li>Use the same type for all array elements</li>
+						<li>Preallocate small arrays</li>
+						<li>Don't prealocate >64K arrays, grow as you go.</li>
+					</ul>
+				</section>
+
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Optimized compiler</h3>
+					<p>How does the Optimized compiler work?</p>
+					<p class="fragment fade-in">Learns while the program runs</p>
+					<p class="fragment fade-in">Inline caching: speed up runtime method bindings</p>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+function max(a, b) {
+	return a > b ? a : b;
+}
+
+max(1, 2);
+max(300, 100);
+max(45, 30); //Optimized vtable (monomorphic)
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+max("a", "z") //Warning! Polymorphic vtable => slower
+					</code></pre>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Optimized compiler</h3>
+					<img src="img/kameha.png" style="border:0" width="150" />
+					<p>Inlining is the mother of all optimizations</p>
+					<p class="fragment fade-in">Monomorphic functions are more easily inlined</p>
+					<p class="fragment fade-in">Bailouts...</p>
+					<ul>
+						<li class="fragment fade-in">Functions with big text size</li>
+						<li class="fragment fade-in">Functions with lots of variables and arguments</li>
+						<li class="fragment fade-in">Functions with try{} catch{} blocks</li>
+						<li class="fragment fade-in">Functions with for(var in) blocks</li>
+					</ul>
+
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Mutenroshi's Tips</h3>
+					<p><img src="img/mutenroshi.jpg" style="border:0" width="250" /></p>
+					<ul>
+						<li>Always use the same types</li>
+						<li>Never use try{} catch{} blocks in perf. critical functions</li>
+						<li>Never use for(var in) blocks in perf. critical functions</li>
+						<li>Prefer smaller methods</li>
+					</ul>
+				</section>
+
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Practical example</h3>
+					<p>C++ vs JavaScript code sample</p>
+					<pre><code class="javascript" data-trim>
+//matrix1.js
+// (...)
+function main() {
+    var sum = 0;
+    for (var i = 0; i &lt; 10000; ++i) {
+        var m = new Matrix(1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 13.13, 14.14, 15.15, 16.16); 
+        for (var j = 0; j &lt; 10000; j++) {
+            sum+=determinant(m);
+        }
+        
+        var p1 = new Point(1.1, 2.2, 3.3);
+        for (var j = 0; j &lt; 10000; ++j) {
+            m.mapPoint(p1);
+        }
+    }
+}
+main();
+					</code></pre>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Practical example</h3>
+					<p>C++</p>
+					<pre><code class="c++" data-trim>
+//matrix.cpp
+//(...)
+int main(int argc, const char * argv[]) {
+    double sum = 0;
+    for (int i = 0; i &lt; 10000; ++i) {
+        Matrix m(1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 13.13, 14.14, 15.15, 16.16);
+        for (int j = 0; j &lt; 10000; ++j) {
+            sum+=Matrix::determinant(m);
+        }
+        Point p1(1.1, 2.2, 3.3);
+        for (int j = 0; j &lt; 10000; j++) {
+            m.mapPoint(p1);
+        }
+        sum+=p1.x;   
+    }
+    return 0;
+}
+					</code></pre>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Perfomance profiling</h3>
+					<p>V8 JavaScript shell (d8) is a very useful tool</p>
+					<pre><code class="bash" data-trim>
+$> time d8 matrix1.js
+real	0m42.106s
+					</code></pre>
+					<pre class="fragment fade-in"><code class="bash" data-trim>
+$> clang++ matrix.cpp
+$> time ./a.out
+real	0m6.323s
+					</code></pre>
+					<p class="fragment fade-in">C++ is ~7 times faster than JS</p>
+					<p class="fragment fade-in">Wait a moment...</p>
+					<pre class="fragment fade-in"><code class="bash" data-trim>
+$> clang++ matrix.cpp -O3 #Super Saiyan Level 3 flag
+$> time ./a.out
+real	0m0.110s
+					</code></pre>
+					<p class="fragment fade-in">C++ is ~400 times faster than JS!</p>
+				</section>
+
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Perfomance battle: C++ vs JS</h3>
+					<p>
+						<img src="img/gokuss3.png" width="210" style="border:0;box-shadow:none;background:transparent;" />
+						<img src="img/yamcha2.png" width="164" style="border:0;box-shadow:none;background:transparent;" />
+					</p>
+					<p class="fragment fade-in">Let's Apply the lessons learned!</p>
+					<p class="fragment fade-in">~200x slower?</p>
+					<p class="fragment fade-in">~100x slower?</p>
+					<p class="fragment fade-in">~10x slower?</p>
+					<p class="fragment fade-in">~2x slower?</p>
+					<p class="fragment fade-in">faster?</p>
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Check performance bailouts</h3>
+					<pre><code class="javascript" data-trim>
+function determinant() {
+    //(...)
+    return a1 * (b2 * c3  - b3 * c2); // (...)
+    //test
+    try{
+    }
+    catch(ex) {
+    }
+}
+					</code></pre>
+
+					<p class="fragment fade-in">Remove all the bailouts and...</p>
+					<pre class="fragment fade-in"><code class="bash" data-trim>
+$> time d8 matrix2.js
+real	0m15.628s
+					</code></pre>
+					<p class="fragment fade-in">~150x <br /><img src="img/krilin.jpg" style="border:0;box-shadow:none;background:transparent;" width="150" /></p>
+
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Optimized Array Storage</h3>
+					<pre><code class="javascript" data-trim>
+function Matrix(m11, m12, m13, m14, m21, m22, m23, /*(...)*/) {
+    var m_matrix = [[],[],[],[]];
+    m_matrix[0][0] = m11; 
+    m_matrix[0][1] = m12; 
+    m_matrix[0][2] = m13; 
+    m_matrix[0][3] = m14;  //(...)
+}
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+function Matrix(m11, m12, m13, m14, m21, m22, m23, /*(...)*/) {
+    var m_matrix = new Array(16);
+    m_matrix[0] = m11; 
+    m_matrix[1] = m12; 
+    m_matrix[2] = m13; 
+    m_matrix[3] = m14;  //(...)
+}
+					</code></pre>
+					<pre class="fragment fade-in"><code class="bash" data-trim>
+$> time d8 matrix2.js
+real	0m13.967s
+					</code></pre>
+					<p class="fragment fade-in"><span style="position:absolute;left:30%;">~140x</span><img src="img/piccolo.jpg" style="border:0; margin-top:-15px;" width="175" /></p>
+
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Check inlining</h3>
+					<pre><code class="bash" data-trim>
+$> d8 matrix3.js --trace-inlining
+Did not inline determinant3x3 called from determinant(target text too big)
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+function determinant3x3(a1, a2, a3, b1, b2, b3, c1, c2, c3) {
+    //  Calculate the determinant of a 3x3 matrix
+    // 
+    //      | a1,  b1,  c1 |
+    //      | a2,  b2,  c2 |
+    //      | a3,  b3,  c3 |
+    // (...)
+} 
+					</code></pre>
+					<p class="fragment fade-in">Remove the comments and...</p>
+					<pre class="fragment fade-in"><code class="bash" data-trim>
+$> time d8 matrix4.js
+real	0m4.491s
+					</code></pre>
+					<p class="fragment fade-in">~50x <br /><img src="img/trunks.jpg" style="border:0" width="150" /></p>
+
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Check inlining</h3>
+					<pre><code class="bash" data-trim>
+$> d8 matrix4.js --trace-inlining
+Did not inline determinant called from main (target AST is too large)
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+function determinant(matrix) {
+    var m = matrix.m_matrix;
+    var a1 = m[0]; var b1 = m[1]; var c1 = m[2]; var d1 = m[3]; //(...)
+    return a1 * determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4)
+    - b1 * determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4)
+    + c1 * determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4)
+    - d1 * determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
+}
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+return m[0] * determinant3x3(m[5], m[9], m[13], m[6], m[10], m[14], m[7], m[11], m[15])
+- m[1] * determinant3x3(m[4], m[8], m[12], m[6], m[10], m[14], m[7], m[11], m[15])
++ m[2] * determinant3x3(m[4], m[8], m[12], m[5], m[9], m[13], m[7], m[11], m[15])
+- m[3] * determinant3x3(m[4], m[8], m[12], m[5], m[9], m[13], m[6], m[10], m[14]);
+					</code></pre>
+					<pre class="fragment fade-in"><code class="bash" data-trim>
+$> time d8 matrix5.js
+real	0m1.794s
+					</code></pre>
+					<p class="fragment fade-in"><span style="position:absolute;left:30%;">~16x</span><img src="img/goku2.jpg" style="border:0; margin-top:-15px;" width="175" /></p>
+
+				</section>
+
+				<section data-background="speed.jpg" style="background-image:url('white.png');">
+					<h3>Check inlining</h3>
+					<pre><code class="bash" data-trim>
+$> d8 matrix5.js --trace-inlining | grep mapPoint
+$>
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+Matrix.prototype = { 
+    mapPoint: function(p) {
+        var x = this.m_matrix[12] + p.x * this.m_matrix[0] + p.y * this.m_matrix[4] + p.z * this.m_matrix[8];
+        var y = this.m_matrix[13] + p.x * this.m_matrix[1] + p.y * this.m_matrix[5] + p.z * this.m_matrix[9];
+        //(...)		
+    }
+}
+					</code></pre>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+function mapPoint(m_matrix,p) {
+    var x = m_matrix.a41 + p.x * m_matrix.a11 + p.y * m_matrix.a21 + p.z * m_matrix.a31;
+    var y = m_matrix.a42 + p.x * m_matrix.a12 + p.y * m_matrix.a22 + p.z * m_matrix.a32;
+    //(...)				
+}
+					</code></pre>
+					<pre class="fragment fade-in"><code class="bash" data-trim>
+$> time d8 matrix6.js
+real	0m0.698s
+					</code></pre>
+					<p class="fragment fade-in"><span style="position:absolute;left:30%;">~6x</span><img src="img/gokuss.jpg" style="border:0; margin-top:-15px;" width="175" /></p>
+
+				</section>
+
+				<section data-background="speed.jpg"> 
+					<img src="ludeiwebgl.png" style="border:0;box-shadow:none;width:30%;">
+					<h2>Canvas And WebGL Tips</h2>
+				</section>
+
+				<section data-background="speed.jpg">
+					<h3>Canvas Save() and Restore()</h3>
+					<pre><code class="javascript" data-trim>
+for (var i= 0; i &lt; sprites.length; ++i) {
+	ctx.save();
+	sprites[i].render();
+	ctx.restore();
+}
+					</code></pre>
+					<p class="fragment fade-in">Canvas 2D context is huge...</p>
+					<ul class="fragment fade-in">
+						<li>Transformation Matrix</li>
+						<li>Fill Styles</li>
+						<li>Stroke Styles</li>
+						<li>Current Path</li>
+						<li>Clipping</li>
+					</ul>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+for (var i= 0; i &lt; sprites.length; ++i) {
+	ctx.translate(x,y); //transform
+	sprites[i].render();
+	ctx.translate(-x,-y); //inverse transform
+}
+					</code></pre>
+				</section>
+
+				<section data-background="speed.jpg">
+					<h3>Canvas Paths</h3>
+					<p>Limited API: Transformations</p>
+					<p>Tessellation is slow</p>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+//Cache rendered path to a canvas
+var canvas = document.createElement("canvas");
+canvas.width = 500;
+canvas.height = 500;
+var ctx = canvas.getContext("2d");
+ctx.beginPath();
+ctx.moveTo(100,100);
+ctx.bezierCurveTo(20,100,200,100,200,20);
+ctx.bezierCurveTo(30,300,100,300,50,10);
+ctx.fill();
+ctx.stroke();
+
+mainctx.drawImage(canvas, 0, 0);
+					</code></pre>
+				</section>
+
+				<section data-background="speed.jpg">
+					<h3>Texture Packing</h3>
+					<p> Always pack your textures</p>
+					<img src="img/pack.png" style="border:0" />
+					<br />
+					<p class="fragment fade-in"><a href="http://www.codeandweb.com/texturepacker">http://www.codeandweb.com/texturepacker</a></p>
+					<p class="fragment fade-in"><a href="https://github.com/jorgebastida/glue">https://github.com/jorgebastida/glue</a></p>
+					<p class="fragment fade-in"><a href="https://github.com/hyperandroid/Sprite-Packer">https://github.com/hyperandroid/Sprite-Packer</a></p>
+				</section>
+
+				<section data-background="speed.jpg">
+					<h3>WebGL Text Rendering</h3>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+var canvas = document.createElement("canvas");
+canvas.width = 500;
+canvas.height = 50;
+var ctx = canvas.getContext("2d");
+ctx.font = "30px Saiyan-Sans";
+ctx.fillText("Hello world!",0,0);
+
+var texture = gl.createTexture();
+gl.bindTexture(texture);
+gl.texImage2D(canvas);
+					</code></pre>
+
+						<ul class="fragment fade-in">
+						<li>Canvas Texture</li>
+						<li>Canvas Context</li>
+						<li>System Buffer</li>
+						<li>WebGL texture</li>
+						<li>Data copy</li>
+					</ul>
+					<p class="fragment fade-in">Better use sprited Fonts! <br /> <a href="http://71squared.com/glyphdesigner">http://71squared.com/glyphdesigner</a></p>
+
+				</section>
+
+				<section data-background="speed.jpg">
+					<h3>WebGL bufferSubData</h3>
+					<pre><code class="javascript" data-trim>
+//initialization
+gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW);
+
+//render tick
+gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
+gl.bufferSubData(gl.ARRAY_BUFFER, 0, vertices);
+					</code></pre>
+					<p>Very Slow on mobile devices</p>
+					<p class="fragment fade-in">Use vertexAttribPointer instead!</p>
+					<pre class="fragment fade-in"><code class="javascript" data-trim>
+gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, vertices);
+					</code></pre>
+
+				</section>
+
+				<section data-background="speed.jpg">
+					<h3>Caution with generalist Render Engines</h3>
+					<img src="img/generalist.gif" style="border:0" />
+					<p>Makes the development easier, but...</p>
+					<p class="fragment fade-in">Too many state changes</p>
+					<p class="fragment fade-in">We've suffered it with three.js</p>
+				</section>
+
+				<section  id="ludeiSection">
+						<section data-background="backgrounds/ludei-promo.jpg"></section>
+				</section>
+				<section>
+					<img src="logo.png" style="border:0;box-shadow:none;"><p>About us</p>
+					<ul>
+						<li>Bilbao and San Francisco based company</li>
+						<li>Small but awesome development team</li>
+						<li>Strongly focused on HTML5 technologies</li>
+                    </ul>
+                    <div><br/>www.ludei.com</div>
+				</section>
+
+				<section>
+	                <div><img src="logo.png" style="border:0;box-shadow:none;"></div>
+	                <p>HTML5 has huge advantages...</p>
+	                <p>...but it's horrible on mobile</p>
+	                <p class="fragment fade-in">Solution: create our own tech!</p>
+				</section>
+
+
+				<section data-background="backgrounds/cocoonjs.jpg">
+				</section>
+
+				<section data-background="speed.jpg">
+					<img src="cocoon.png" style="border:0;box-shadow:none;">
+					<p>Goal: Feel native in every way possible</p>
+                    <ul>
+                        <li>Accelerated canvas</li>
+                        <li>WebGL support</li>
+                        <li>High perfomance music</li>
+                    </ul>
+                </section>
+
+                <section data-background="speed.jpg">
+					<img src="cocoon.png" style="border:0;box-shadow:none;">
+                    <h2>Native Features</h2>
+                    <ul>
+                        <li>Ad networks</li>
+                        <li>In-App purchases</li>
+                        <li>Facebook</li>
+                        <li>Google Play</li>
+                        <li>GameCenter</li>
+                        <li>Twitter</li>
+                        <li>GPS, vibration, camera...</li>
+                    </ul>
+                </section>
+
+                <section data-background="speed.jpg">
+					<img src="logo.png" style="border:0;box-shadow:none;">
+                    <h2>Cloud system</h2>
+                    <div>You upload your HTML5 game.<br/>We give you a bundle ready to deploy.</div>
+                        <div><br/></div>
+                        <ul>
+                            <b><li>Android</li>
+                            <li>iOS</li>
+                            <li>Amazon Kindle</li></b>
+                            <li>Firefox OS</li>
+                            <li>Pokki</li>
+                            <li>Chrome Store</li>
+                            <li>Tizen</li>
+                        </ul>
+					</ul>
+				</section>
+
+				<section data-background="speed.jpg">
+					<img src="cocoon.png" style="border:0;box-shadow:none;">
+					<p>How does it work?</p>
+
+					<ul class="fragment fade-in">
+						<li>It's a home made browser</li>
+						<li>Home made Canvas, WebGL, Sound, etc... implementations</li>
+						<li>Goal: Be faster than mobile webviews</li>
+					</ul>
+					<br /><br />
+					<p class="fragment fade-in">A big challenge... Are we crazy?</p>
+					<p class="fragment fade-in">Yes, but we're from Bilbao...</p>
+					<p class="fragment fade-in">... and we are Dragon Ball fans ;)</p>      
+                </section>
+
+                <section data-background="speed.jpg">
+					<img src="cocoon.png" style="border:0;box-shadow:none;">
+					<p>The first test</p>
+					<pre><code class="c++" data-trim>
+#include &lt;JavaScriptCore/JavaScriptCore.h&gt;
+
+int main(int argc, const char * argv[])
+{
+    JSContextRef ctx = JSGlobalContextCreate(NULL);
+    const char * js = "console.log('hello world!');";
+    JSStringRef script = JSStringCreateWithUTF8CString(js);
+    JSValueRef exception = NULL;
+    JSValueRef result = JSEvaluateScript(ctx, script, NULL, NULL, 0, &amp;exception);
+    JSStringRelease(script);
+    JSGlobalContextRelease(ctx);
+    
+    return 0;
+}   
+				</code></pre> 
+                </section>
+
+                <section data-background="img/void.jpg">
+				</section>
+
+				<section data-background="speed.jpg">
+					<img src="cocoon.png" style="border:0;box-shadow:none;">
+					<p>Challenge: Multiple JavaScript Engine support</p>
+					<p>
+						<img src="img/v8.jpg" style="border:0; float left;" width="150" />
+						<img src="img/spidermonkey.jpg" style="border:0; float left;" width="150" />
+						<img src="img/javascriptcore.jpg" style="border:0; float left;" width="150" />
+					</p>
+					<pre><code class="c++" data-trim>
+#include &quot;v8.h&quot;
+using namespace v8;
+
+int main(int argc, const char * argv[])
+{
+    Isolate* isolate = Isolate::GetCurrent();.
+    HandleScope handle_scope(isolate);
+    Handle&lt;Context&gt; context = Context::New(isolate);
+    Persistent&lt;Context&gt; persistent_context(isolate, context);
+    Context::Scope context_scope(context);
+    Handle&lt;String&gt; source = String::New('console.log('Hello world!')');
+    Handle&lt;Script&gt; script = Script::Compile(source);
+    Handle&lt;Value&gt; result = script-&gt;Run();
+    persistent_context.Dispose();
+    
+    return 0;
+}   
+				</code></pre> 
+                </section>
+
+
+                <section data-background="speed.jpg">
+					<img src="cocoon.png" style="border:0;box-shadow:none;">
+					<p>Solution?</p>
+					<p class="fragment fade-in">C++ Magic to solve the puzzle</p>  
+
+					<pre class="fragment fade-in"><code class="c" data-trim>
+//magic typedefs
+typedef v8::Persistent&lt;v8::Context&gt; * JSContextRef;
+typedef v8::Handle&lt;v8::Value&gt; JSValueRef;
+typedef v8::Handle&lt;v8::Object&gt; JSObjectRef;
+				</code></pre>    
+
+				<pre class="fragment fade-in"><code class="c++" data-trim>
+//magic macros
+#define JSEntryPoint v8::Isolate::Scope isolateScope(getSharedIsolate()); \
+v8::Locker v8Lock(getSharedIsolate()); \
+v8::HandleScope handle_scope(getSharedIsolate());
+#define JSContextScope(ctx) v8::Context::Scope context_scope(v8::Handle&lt;v8::Context&gt;::New(getSharedIsolate(),*ctx));
+				</code></pre> 
+
+                </section>
+
+                <section data-background="img/puzzle.png">
+					<p style="background-color:white;">A really challenging puzzle (ex. 1000 fake functions)</p> 
+
+                </section>
+
+                <section data-background="speed.js">
+                    <video width="1980" height="1080" id="ibasketVideo" controls data-autoplay>
+                        <source src="videos/showcase.mp4" type="video/mp4">                                                                                                                                                                   
+                    </video>
+                </section>
+
+				<section data-background="backgrounds/cocoonjs.jpg">
+					<h2 style="margin-top:-50px;color:#3F3A3A;">Thank you!</h2>
+					<h3 style="position:absolute;top:220px;left:40px;color:#3F3A3A">@MortimerGoro</h3>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+			
+			var element = $('.logoCortado');
+
+			element.bind('cusfadeOut',function() {
+			        $(this).fadeOut(((Math.random() * 4000 | 0) + 2000),function() {
+			                $(this).trigger('cusfadeIn');
+			        });
+			});
+			element.bind('cusfadeIn',function() {
+			        $(this).fadeIn(((Math.random() * 4000 | 0) + 2000), function() {
+			                $(this).trigger('cusfadeOut');
+			        });
+			});
+			element.trigger('cusfadeOut');
+
+			Reveal.addEventListener( 'slidechanged', function( event ) {
+				if(event.indexh == 1){
+					$('.logoCortado').remove();
+				}
+			});
+            
+            if( Reveal.getIndices().h != 0){
+				$('.logoCortado').remove();
+            }
+        
+            $(document).ready( function() {
+
+            });
+
+
+		</script>
+
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/controldeck-slides.js"></script>
+	</body>
+</html>
