@@ -3,6 +3,8 @@ SuperSaiyanJS
 
 Presentation about JavaScript performance
 
+Preview: http://mortimergoro.github.io/SuperSaiyanJS/#/
+
 ### Contents
 
 - JavaScript perfomance
